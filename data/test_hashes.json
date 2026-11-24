@@ -1,0 +1,32 @@
+[
+    {
+        "label": "test-cyber123",
+        "algorithm": "md5",
+        "hash": "a1c2de1cf95710041ddca199739f19da",
+        "plaintext_length": 8
+    },
+    {
+        "label": "BlueSky2026",
+        "algorithm": "md5",
+        "hash": "c1eada23e289fddb7eff4a2be371d7db",
+        "plaintext_length": 11
+    },
+    {
+        "label": "Tiger@123",
+        "algorithm": "md5",
+        "hash": "dc99f33ccb73d8110507a00dd1e0b41e",
+        "plaintext_length": 9
+    },
+    {
+        "label": "password123",
+        "algorithm": "md5",
+        "hash": "482c811da5d5b4bc6d497ffa98491e38",
+        "plaintext_length": 11
+    },
+    {
+        "label": "qwerty",
+        "algorithm": "md5",
+        "hash": "d8578edf8458ce06fbc5bb76a58c5ca4",
+        "plaintext_length": 6
+    }
+]

@@ -1,0 +1,734 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cyber Shadow | Security Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .tool-section {
+            margin-top: 30px;
+            scroll-margin-top: 25px;
+        }
+
+        .tool-section h2 {
+            margin-bottom: 15px;
+        }
+
+        .tool-box {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+        .tool-box input,
+        .tool-box select {
+            width: 100%;
+            padding: 13px;
+            margin: 10px 0 15px;
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .tool-box button {
+            background: var(--green);
+            color: #07120f;
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-weight: 700;
+            margin: 8px 5px 8px 0;
+            cursor: pointer;
+        }
+
+        .tool-box button:hover {
+            opacity: 0.85;
+        }
+
+        /* PASSWORD INPUT AND SHOW/HIDE BUTTON */
+
+        .password-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .password-input-wrap input {
+            flex: 1;
+            min-width: 0;
+            width: 100%;
+            margin: 10px 0 15px;
+        }
+
+        .tool-box .password-toggle {
+            flex: 0 0 auto;
+            margin: 10px 0 15px;
+            padding: 12px 16px;
+            background: var(--panel);
+            color: var(--text);
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .tool-box .password-toggle:hover {
+            border-color: var(--green);
+            opacity: 1;
+        }
+
+        .output {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            color: var(--text);
+            min-height: 45px;
+            line-height: 1.6;
+        }
+
+        .tool-box label {
+            display: block;
+            margin-top: 12px;
+        }
+
+        .main-content {
+            min-width: 0;
+        }
+
+        .dashboard-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @media(max-width: 700px) {
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">◈ CYBER SHADOW</div>
+
+        <nav>
+            <a href="/" class="nav-link">⌂ Dashboard</a>
+            <a href="#policy" class="nav-link">▣ Password Policy</a>
+            <a href="#hash" class="nav-link">⌘ Hash Generator</a>
+            <a href="#save" class="nav-link">▣ Save Test Data</a>
+            <a href="#cracker" class="nav-link">⌕ Dictionary Demo</a>
+            <a href="#performance" class="nav-link">◷ Performance</a>
+        </nav>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div>
+                <h1>Security Dashboard</h1>
+                <p class="subtitle">
+                    Welcome to Cyber Shadow Security Lab
+                </p>
+            </div>
+
+            <span class="status">● SYSTEM READY</span>
+
+        </header>
+
+
+        <!-- DASHBOARD CARDS -->
+
+        <section class="dashboard-grid">
+
+            <div class="card">
+                <h3>Password Policy Checker</h3>
+                <p>Evaluate password strength against security rules.</p>
+                <a href="#policy" class="nav-link">Open Tool →</a>
+            </div>
+
+            <div class="card">
+                <h3>Hash Generator</h3>
+                <p>Generate MD5 and SHA-1 hashes.</p>
+                <a href="#hash" class="nav-link">Open Tool →</a>
+            </div>
+
+            <div class="card">
+                <h3>Educational Dictionary Demo</h3>
+                <p>Match self-generated test hashes against a local wordlist.</p>
+                <a href="#cracker" class="nav-link">Open Tool →</a>
+            </div>
+
+            <div class="card">
+                <h3>Performance Analysis</h3>
+                <p>View attempts and execution time.</p>
+                <a href="#performance" class="nav-link">Open Tool →</a>
+            </div>
+
+        </section>
+
+
+        <!-- 1. PASSWORD POLICY CHECKER -->
+
+        <section class="tool-section" id="policy">
+
+            <h2>Password Policy Checker</h2>
+
+            <div class="tool-box">
+
+                <label>Enter dummy test password</label>
+
+                <div class="password-input-wrap">
+
+                    <input
+                        id="policyPassword"
+                        type="password"
+                        placeholder="Enter test password"
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        aria-controls="policyPassword"
+                        aria-pressed="false"
+                        onclick="togglePasswordVisibility('policyPassword', this)"
+                    >Show</button>
+
+                </div>
+
+                <button onclick="checkPolicy()">
+                    Check Password Policy
+                </button>
+
+                <pre class="output" id="policyResult">Policy report will appear here.</pre>
+
+            </div>
+
+        </section>
+
+
+        <!-- 2. HASH GENERATOR -->
+
+        <section class="tool-section" id="hash">
+
+            <h2>Hash Generator</h2>
+
+            <div class="tool-box">
+
+                <label>Enter dummy test password</label>
+
+                <div class="password-input-wrap">
+
+                    <input
+                        id="hashPassword"
+                        type="password"
+                        placeholder="Enter dummy test password"
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        aria-controls="hashPassword"
+                        aria-pressed="false"
+                        onclick="togglePasswordVisibility('hashPassword', this)"
+                    >Show</button>
+
+                </div>
+
+                <button onclick="generateHash()">
+                    Generate MD5 + SHA-1
+                </button>
+
+                <pre class="output" id="hashResult">Generated hashes will appear here.</pre>
+
+            </div>
+
+        </section>
+
+
+        <!-- 3. SAVE TEST HASH -->
+
+        <section class="tool-section" id="save">
+
+            <h2>Save Test Hash</h2>
+
+            <div class="tool-box">
+
+                <p>
+                    Save a generated hash for your educational
+                    dictionary demonstration.
+                </p>
+
+                <label>Dummy test password</label>
+
+                <div class="password-input-wrap">
+
+                    <input
+                        id="savePassword"
+                        type="password"
+                        placeholder="Enter dummy test password"
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        aria-controls="savePassword"
+                        aria-pressed="false"
+                        onclick="togglePasswordVisibility('savePassword', this)"
+                    >Show</button>
+
+                </div>
+
+                <label>Test password label</label>
+
+                <input
+                    id="hashLabel"
+                    type="text"
+                    placeholder="Example: BlueSky2026"
+                >
+
+                <label>Select hashing algorithm</label>
+
+                <select id="saveAlgorithm">
+
+                    <option value="md5">MD5</option>
+                    <option value="sha1">SHA-1</option>
+
+                </select>
+
+                <button onclick="saveTestHash()">
+                    Generate & Save Test Hash
+                </button>
+
+                <pre class="output" id="saveResult">Save status will appear here.</pre>
+
+            </div>
+
+        </section>
+
+
+        <!-- 4. EDUCATIONAL DICTIONARY DEMO -->
+
+        <section class="tool-section" id="cracker">
+
+            <h2>Educational Dictionary Demo</h2>
+
+            <div class="tool-box">
+
+                <p>
+                    Match your own generated test hashes against
+                    the local wordlist.
+                </p>
+
+                <button onclick="loadHashes()">
+                    Load Saved Test Hashes
+                </button>
+
+                <label>Select saved test hash</label>
+
+                <select id="savedHash">
+
+                    <option value="">Load saved hashes first</option>
+
+                </select>
+
+                <button onclick="runCracker()">
+                    Run Dictionary Demo
+                </button>
+
+                <pre class="output" id="crackerResult">Dictionary report will appear here.</pre>
+
+            </div>
+
+        </section>
+
+
+        <!-- 5. PERFORMANCE ANALYSIS -->
+
+        <section class="tool-section" id="performance">
+
+            <h2>Performance Analysis</h2>
+
+            <div class="tool-box">
+
+                <button onclick="loadStats()">
+                    Refresh Performance Stats
+                </button>
+
+                <pre class="output" id="statsResult">Performance statistics will appear here.</pre>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        // COMMON API FUNCTION
+
+        async function apiRequest(url, method = "GET", data = null) {
+
+            const options = {
+                method: method,
+                headers: {}
+            };
+
+            if (data !== null) {
+
+                options.headers["Content-Type"] = "application/json";
+
+                options.body = JSON.stringify(data);
+            }
+
+            const response = await fetch(url, options);
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || "Request failed.");
+            }
+
+            return result;
+        }
+
+
+        // COMMON PASSWORD SHOW / HIDE FUNCTION
+
+        function togglePasswordVisibility(inputId, button) {
+
+            const passwordInput = document.getElementById(inputId);
+
+            const currentlyHidden =
+                passwordInput.type === "password";
+
+            passwordInput.type =
+                currentlyHidden ? "text" : "password";
+
+            button.textContent =
+                currentlyHidden ? "Hide" : "Show";
+
+            button.setAttribute(
+                "aria-pressed",
+                String(currentlyHidden)
+            );
+
+            button.setAttribute(
+                "aria-label",
+                currentlyHidden ? "Hide password" : "Show password"
+            );
+        }
+
+
+        // 1. PASSWORD POLICY CHECKER
+
+        async function checkPolicy() {
+
+            const password =
+                document.getElementById("policyPassword").value;
+
+            const output =
+                document.getElementById("policyResult");
+
+            if (!password) {
+
+                output.textContent =
+                    "Please enter a dummy test password.";
+
+                return;
+            }
+
+            try {
+
+                const result = await apiRequest(
+                    "/api/policy",
+                    "POST",
+                    { password: password }
+                );
+
+                output.textContent =
+                    result.report +
+                    "\n\nValid: " + result.valid +
+                    "\nScore: " + result.score +
+                    "\nRating: " + result.rating;
+
+            } catch (error) {
+
+                output.textContent =
+                    "Error: " + error.message;
+            }
+        }
+
+
+        // 2. HASH GENERATOR
+
+        async function generateHash() {
+
+            const password =
+                document.getElementById("hashPassword").value;
+
+            const output =
+                document.getElementById("hashResult");
+
+            if (!password) {
+
+                output.textContent =
+                    "Please enter a dummy test password.";
+
+                return;
+            }
+
+            try {
+
+                const result = await apiRequest(
+                    "/api/hash",
+                    "POST",
+                    { password: password }
+                );
+
+                output.textContent =
+                    "MD5:\n" + result.md5 +
+                    "\n\nSHA-1:\n" + result.sha1;
+
+            } catch (error) {
+
+                output.textContent =
+                    "Error: " + error.message;
+            }
+        }
+
+
+        // 3. SAVE TEST HASH
+
+        async function saveTestHash() {
+
+            const password =
+                document.getElementById("savePassword").value;
+
+            const label =
+                document.getElementById("hashLabel").value.trim();
+
+            const algorithm =
+                document.getElementById("saveAlgorithm").value;
+
+            const output =
+                document.getElementById("saveResult");
+
+            if (!password) {
+
+                output.textContent =
+                    "Please enter a dummy test password.";
+
+                return;
+            }
+
+            if (!label) {
+
+                output.textContent =
+                    "Please enter a test label.";
+
+                return;
+            }
+
+            try {
+
+                const result = await apiRequest(
+                    "/api/save-hash",
+                    "POST",
+                    {
+                        password: password,
+                        label: label,
+                        algorithm: algorithm
+                    }
+                );
+
+                output.textContent =
+                    result.message +
+                    "\nLabel: " + result.record.label +
+                    "\nAlgorithm: " + result.record.algorithm +
+                    "\nHash: " + result.record.hash;
+
+                await loadHashes();
+
+            } catch (error) {
+
+                output.textContent =
+                    "Error: " + error.message;
+            }
+        }
+
+
+        // 4. LOAD SAVED HASHES
+
+        async function loadHashes() {
+
+            const output =
+                document.getElementById("crackerResult");
+
+            try {
+
+                const records =
+                    await apiRequest("/api/hashes");
+
+                const select =
+                    document.getElementById("savedHash");
+
+                select.innerHTML = "";
+
+                if (!records.length) {
+
+                    select.innerHTML =
+                        '<option value="">No saved hashes found</option>';
+
+                    output.textContent =
+                        "No saved test hashes available.";
+
+                    return;
+                }
+
+                select.innerHTML =
+                    '<option value="">Choose a saved test hash</option>';
+
+                records.forEach(record => {
+
+                    const option =
+                        document.createElement("option");
+
+                    option.value = record.label;
+
+                    option.textContent =
+                        record.label + " (" + record.algorithm + ")";
+
+                    select.appendChild(option);
+
+                });
+
+                output.textContent =
+                    records.length +
+                    " saved test hash(es) loaded successfully.";
+
+            } catch (error) {
+
+                output.textContent =
+                    "Error: " + error.message;
+            }
+        }
+
+
+        // 5. EDUCATIONAL DICTIONARY DEMO
+
+        async function runCracker() {
+
+            const label =
+                document.getElementById("savedHash").value;
+
+            const output =
+                document.getElementById("crackerResult");
+
+            if (!label) {
+
+                output.textContent =
+                    "Please select a saved test hash.";
+
+                return;
+            }
+
+            try {
+
+                const result = await apiRequest(
+                    "/api/crack",
+                    "POST",
+                    { label: label }
+                );
+
+                output.textContent = result.report;
+
+                await loadStats();
+
+            } catch (error) {
+
+                output.textContent =
+                    "Error: " + error.message;
+            }
+        }
+
+
+        // 6. PERFORMANCE ANALYSIS
+
+        async function loadStats() {
+
+            const output =
+                document.getElementById("statsResult");
+
+            try {
+
+                const result =
+                    await apiRequest("/api/stats");
+
+                if (result.message) {
+
+                    output.textContent = result.message;
+
+                    return;
+                }
+
+                output.textContent =
+                    "Attempts: " + result.attempts +
+                    "\nTotal candidates: " + result.total_candidates +
+                    "\nElapsed seconds: " + result.elapsed_seconds +
+                    "\nAttempts per second: " + result.attempts_per_second +
+                    "\nMatch found: " + result.found;
+
+            } catch (error) {
+
+                output.textContent =
+                    "Error: " + error.message;
+            }
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Cyber Shadow - Password Policy Auditor & Educational Cracker Demo
+#
+# This project uses ONLY the Python standard library
+# (hashlib, json, os, re, time, string, dataclasses, typing).
+#
+# No third-party packages are required.
+# Compatible with Python 3.10+ (tested with Python 3.12, designed
+# for Python 3.14.10 as requested).
+#
+# There is nothing to install here, but this file is kept so the
+# project follows standard Python project conventions and so a
+# `pip install -r requirements.txt` command is safe to run (it will
+# simply install nothing).
+gunicorn 
