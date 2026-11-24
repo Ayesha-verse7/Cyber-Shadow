@@ -11,4 +11,5 @@
 # project follows standard Python project conventions and so a
 # `pip install -r requirements.txt` command is safe to run (it will
 # simply install nothing).
+flask
 gunicorn 
